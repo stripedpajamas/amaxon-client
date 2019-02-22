@@ -1,6 +1,6 @@
-var html = require('choo/html')
+const html = require('choo/html')
 
-var TITLE = 'amaxon-client - route not found'
+const TITLE = 'amaxon - route not found'
 
 module.exports = view
 

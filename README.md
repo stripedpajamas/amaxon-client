@@ -1,5 +1,6 @@
 # amaxon-client
-Amaxon web client
+
+proof of concept
 
 ## Commands
 Command                | Description                                      |
