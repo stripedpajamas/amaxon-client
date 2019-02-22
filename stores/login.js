@@ -1,25 +1,35 @@
 const api = require('../api')
 
-module.exports = store
+const AUTH_ROUTES = new Set([
+  '/products'
+])
 
-function store (state, emitter) {
+module.exports = function store (state, emitter) {
   state.login = {
+    firstLoad: true,
     authenticated: false,
-    loading: false,
+    loading: true,
     loggedIn: false,
     email: '',
     invalidToken: false
   }
 
   emitter.on(state.events.NAVIGATE, async () => {
-    if (!state.login.authenticated) {
+    if (!state.login.authenticated && AUTH_ROUTES.has(state.href)) {
       emitter.emit(state.events.PUSHSTATE, '/')
     }
   })
 
   emitter.on('login:check', async () => {
+    if (state.login.firstLoad) {
+      state.login.firstLoad = false
+    }
     const res = await api.checkAuth()
-    if (!res.ok) return
+    if (!res.ok) {
+      state.login.loading = false
+      emitter.emit(state.events.RENDER)
+      return
+    }
     const { email } = await res.json()
     state.login.email = email
     state.login.authenticated = true
@@ -47,6 +57,7 @@ function store (state, emitter) {
       try {
         const res = await api.login(email)
         if (!res.ok) {
+          console.error('Not ok from API:', res)
           emitter.emit(state.events.PUSHSTATE, '/error')
         } else {
           state.login.loggedIn = true

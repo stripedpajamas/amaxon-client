@@ -25,6 +25,11 @@ class API {
     const url = `${this.base}${endpoint}`
     return fetch(url, this.defaultOpts)
   }
+  getProducts () {
+    const endpoint = 'amaxon_get_products'
+    const url = `${this.base}${endpoint}`
+    return fetch(url, this.defaultOpts)
+  }
 }
 
 module.exports = new API()

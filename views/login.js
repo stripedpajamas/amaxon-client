@@ -26,13 +26,13 @@ module.exports = function view (state, emit) {
                   placeholder="Your Email Address"
                   type="text"
                   name="email"
-                  value=${state.email}
+                  value=${state.login.email}
                   id="email-address"
-                  ${state.loading ? 'disabled' : ''}
+                  ${state.login.loading ? 'disabled' : ''}
                 >
                 <input
                   type="submit"
-                  value=${state.loading ? 'Loading...' : 'Send Login Email'}
+                  value=${state.login.loading ? 'Loading...' : 'Send Login Email'}
                 >
               </div>
             </fieldset>
@@ -53,17 +53,18 @@ module.exports = function view (state, emit) {
     </body>
   `
 
-  if (!state.login.authenticated) {
-    if (!state.login.loggedIn) {
-      if (!state.login.loading) emit('login:check')
-      return loginPage
-    } else {
-      return loggedInPage
-    }
+  if (state.login.authenticated) {
+    // if we are authenticated, go to products
+    emit(state.events.PUSHSTATE, '/products')
+    return html`
+      <body>Redirecting...</body>
+    `
   }
-  // if we are authenticated, go to products
-  emit(state.events.PUSHSTATE, '/products')
-  return html`
-    <body>Redirecting...</body>
-  `
+
+  if (state.login.loggedIn) {
+    return loggedInPage
+  }
+
+  if (state.login.firstLoad) emit('login:check')
+  return loginPage
 }
