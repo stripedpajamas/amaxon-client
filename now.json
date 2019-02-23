@@ -1,6 +1,7 @@
 {
   "version": 2,
   "name": "amaxon-client",
+  "alias": ["amaxon.now.sh"],
   "builds": [
     {
       "src": "package.json",
