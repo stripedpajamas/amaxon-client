@@ -29,6 +29,7 @@ class API {
     const endpoint = 'amaxon_get_products'
     const url = `${this.base}${endpoint}`
     return fetch(url, this.defaultOpts)
+      .then(res => res.json())
   }
 }
 

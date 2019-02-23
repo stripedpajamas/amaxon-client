@@ -11,6 +11,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 app.use(require('./stores/login'))
+app.use(require('./stores/products'))
 
 app.route('/', require('./views/login'))
 app.route('/login', require('./views/auth'))
