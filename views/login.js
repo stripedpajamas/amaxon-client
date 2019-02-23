@@ -1,4 +1,6 @@
 const html = require('choo/html')
+const header = require('../components/header')
+const footer = require('../components/footer')
 
 const TITLE = 'amaxon - login'
 
@@ -14,8 +16,9 @@ module.exports = function view (state, emit) {
   }
 
   const loginPage = html`
-    <body class="sans-serif">
-      <main>
+    <body class="sans-serif flex flex-column min-vh-100">
+      ${header('Login')}
+      <main style="flex: 1" class="pt3">
         <section>
           <form onsubmit=${onsubmit}>
             <fieldset>
@@ -39,6 +42,7 @@ module.exports = function view (state, emit) {
           </form>
         </section>
       </main>
+      ${footer}
     </body>
   `
 
