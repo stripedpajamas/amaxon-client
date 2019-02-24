@@ -9,7 +9,7 @@ module.exports = function view (state, emit) {
     emit(state.events.PUSHSTATE, '/')
   }
   emit('login:auth')
-  const text = state.invalidToken
+  const text = state.login.invalidToken
     ? 'Invalid token'
     : 'Logged in successfully! Redirecting...'
   return html`

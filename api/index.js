@@ -31,6 +31,14 @@ class API {
     return fetch(url, this.defaultOpts)
       .then(res => res.json())
   }
+  setProducts () {
+    const endpoint = 'amaxon_set_products'
+    const url = `${this.base}${endpoint}`
+    return fetch(url, Object.assign({
+      method: 'POST'
+    }, this.defaultOpts))
+      .then(res => res.json())
+  }
 }
 
 module.exports = new API()

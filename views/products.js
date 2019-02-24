@@ -8,24 +8,28 @@ module.exports = function view (state, emit) {
   if (state.title !== TITLE) emit(state.events.DOMTITLECHANGE, TITLE)
 
   if (state.products.firstLoad) {
-    // emit('products:get')
+    emit('products:get')
   }
 
-  // const { products } = state.products
-  const products = [
-    {
-      "name": "hat",
-      "url": "https://www.amazon.com/Carhartt-Mens-Acrylic-Watch-Hat/dp/B002G9U38W",
-      "lastCheck": 1550873588743,
-      "lastPrice": -1
-    },
-    {
-      "name": "other thing",
-      "url": "https://www.amazon.com/gp/product/B07M7YZH6Q",
-      "lastCheck": 1550873588743,
-      "lastPrice": -1
-    }
-  ]
+  const { products } = state.products
+  // const products = [
+  //   {
+  //     "name": "hat",
+  //     "url": "https://www.amazon.com/Carhartt-Mens-Acrylic-Watch-Hat/dp/B002G9U38W",
+  //     "lastCheck": 1550873588743,
+  //     "lastPrice": -1
+  //   },
+  //   {
+  //     "name": "other thing",
+  //     "url": "https://www.amazon.com/gp/product/B07M7YZH6Q",
+  //     "lastCheck": 1550873588743,
+  //     "lastPrice": -1
+  //   }
+  // ]
+
+  function onDelete (idx) {
+    emit('products:delete', idx)
+  }
 
   if (state.products.loading) {
     return html`
@@ -37,41 +41,34 @@ module.exports = function view (state, emit) {
   return html`
     <body class="sans-serif dark-gray">
       ${header('Product Dashboard')}
-      <div class="pa4">
+      <main style="flex: 1" class="pa4">
         <div class="overflow-auto">
           <div class="pt3 w-100 mw8 center">
             <h1 class="f4 lh-copy">Products currently watching</h2>
           </div>
-          <table class="pt3 f6 w-100 mw8 center" cellspacing="0">
-            <thead>
-              <tr>
-                <th class="fw6 tl pa3 bg-white">Name</th>
-                <th class="fw6 tl pa3 bg-white">URL</th>
-                <th class="fw6 tl pa3 bg-white">Last Price</th>
-                <th class="fw6 tl pa3 bg-white">Last Checked</th>
-                <th class="fw6 tl pa3 bg-white">Delete</th>
-              </tr>
-            </thead>
-            <tbody class="lh-copy">
-              ${products.map(product => html`
-                <tr class="dim">
-                  <td class="pa3">${product.name}</td>
-                  <td class="pa3">
+          <div class="pt3 f6 w-100 mw8 center">
+            <div class="cf lh-copy">
+              ${products.map((product, idx) => html`
+                <div class="cf dim bb bt b--light-gray">
+                  <div class="pa3 fl w-100 w-20-ns">${product.name}</div>
+                  <div class="pa3 fl w-100 w-30-ns" style="word-break: break-all">
                     <a class="link" href="${product.url}" target="_blank">
                       ${product.url}
                     </a>
-                  </td>
-                  <td class="pa3">
-                    ${product.lastPrice < 0 ? 'Unknown' : product.lastPrice}
-                  </td>
-                  <td class="pa3">
-                    ${new Date(product.lastCheck).toLocaleDateString('en-US')}
-                  </td>
-                  <td class="pa3"><a href="#">x</a></td>
-                </tr>
+                  </div>
+                  <div class="pa3 fl w-third w-20-ns">
+                    Price: ${product.lastPrice < 0 ? 'Unknown' : product.lastPrice}
+                  </div>
+                  <div class="pa3 fl w-third w-20-ns">
+                    Last Checked: ${new Date(product.lastCheck).toLocaleDateString('en-US')}
+                  </div>
+                  <div class="pa3 fl w-third w-10-ns">
+                    <a onclick=${() => onDelete(idx)}>x</a>
+                  </div>
+                </div>
               `)}
-            </tbody>
-          </table>
+            </div>
+          </div>
           <div class="pt4 f6 w-100 mw8 center">
             <h1 class="f4 lh-copy">Add a product to watch</h2>
             <form class="pa3">
@@ -89,7 +86,7 @@ module.exports = function view (state, emit) {
             </form>
           </div>
         </div>
-      </div>
+      </main>
       ${footer}
     </body>
   `

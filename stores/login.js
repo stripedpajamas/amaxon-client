@@ -1,9 +1,5 @@
 const api = require('../api')
 
-const AUTH_ROUTES = new Set([
-  '/products'
-])
-
 module.exports = function store (state, emitter) {
   state.login = {
     firstLoad: true,
@@ -13,12 +9,6 @@ module.exports = function store (state, emitter) {
     email: '',
     invalidToken: false
   }
-
-  emitter.on(state.events.NAVIGATE, async () => {
-    if (!state.login.authenticated && AUTH_ROUTES.has(state.href)) {
-      emitter.emit(state.events.PUSHSTATE, '/')
-    }
-  })
 
   emitter.on('login:check', async () => {
     if (state.login.firstLoad) {

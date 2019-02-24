@@ -20,6 +20,18 @@ module.exports = function store (state, emitter) {
       emitter.emit(state.events.PUSHSTATE, '/error')
     }
   })
+  emitter.on('products:set', async () => {
+    state.products.loading = true
+    try {
+      const products = await api.setProducts()
+      state.products.products = products || []
+      state.products.loading = false
+      emitter.emit(state.events.RENDER)
+    } catch (e) {
+      console.error(e)
+      emitter.emit(state.events.PUSHSTATE, '/error')
+    }
+  })
   emitter.on('DOMContentLoaded', () => {
   })
 }
