@@ -31,11 +31,13 @@ class API {
     return fetch(url, this.defaultOpts)
       .then(res => res.json())
   }
-  setProducts () {
+  setProducts (products) {
     const endpoint = 'amaxon_set_products'
     const url = `${this.base}${endpoint}`
+    const body = JSON.stringify({ products })
     return fetch(url, Object.assign({
-      method: 'POST'
+      method: 'POST',
+      body
     }, this.defaultOpts))
       .then(res => res.json())
   }

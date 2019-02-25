@@ -8,7 +8,9 @@ module.exports = function view (state, emit) {
   if (!state.query.email || !state.query.token) {
     emit(state.events.PUSHSTATE, '/')
   }
-  emit('login:auth')
+  if (state.login.safeToAuthenticate) {
+    emit('login:auth')
+  }
   const text = state.login.invalidToken
     ? 'Invalid token'
     : 'Logged in successfully! Redirecting...'

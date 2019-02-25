@@ -20,10 +20,10 @@ module.exports = function store (state, emitter) {
       emitter.emit(state.events.PUSHSTATE, '/error')
     }
   })
-  emitter.on('products:set', async () => {
+  emitter.on('products:set', async (newProducts) => {
     state.products.loading = true
     try {
-      const products = await api.setProducts()
+      const products = await api.setProducts(newProducts)
       state.products.products = products || []
       state.products.loading = false
       emitter.emit(state.events.RENDER)

@@ -7,7 +7,8 @@ module.exports = function store (state, emitter) {
     loading: true,
     loggedIn: false,
     email: '',
-    invalidToken: false
+    invalidToken: false,
+    safeToAuthenticate: false
   }
 
   emitter.on('login:check', async () => {
@@ -27,6 +28,7 @@ module.exports = function store (state, emitter) {
   })
 
   emitter.on('login:auth', async () => {
+    state.login.safeToAuthenticate = false
     const { email, token } = state.query
     const res = await api.authenticate(email, token)
     if (!res.ok) {
@@ -34,6 +36,7 @@ module.exports = function store (state, emitter) {
       emitter.emit(state.events.RENDER)
       return
     }
+    state.login.safeToAuthenticate = true
     state.login.invalidToken = false
     state.login.authenticated = true
     emitter.emit(state.events.PUSHSTATE, '/products')
