@@ -8,7 +8,7 @@ module.exports = function store (state, emitter) {
     loggedIn: false,
     email: '',
     invalidToken: false,
-    safeToAuthenticate: false
+    safeToAuthenticate: true
   }
 
   emitter.on('login:check', async () => {
