@@ -19,6 +19,7 @@ module.exports = function store (state, emitter) {
     const res = await api.checkAuth()
     if (!res.ok) {
       state.login.loading = false
+      state.login.authenticated = false
       emitter.emit(state.events.RENDER)
       return
     }
