@@ -1,11 +1,13 @@
 const css = require('sheetify')
 const choo = require('choo')
 
-const loginView = require('./views/login')
-const authView = require('./views/auth')
-const productView = require('./views/products')
-const errorView = require('./views/error')
-const notFoundView = require('./views/404')
+const withLayout = require('./components/layout')
+
+const loginView = withLayout(require('./views/login'), 'Login')
+const authView = withLayout(require('./views/auth'), 'Login')
+const productView = withLayout(require('./views/products'), 'Product Dashboard')
+const errorView = withLayout(require('./views/error'), 'Error')
+const notFoundView = withLayout(require('./views/404'), 'Not Found')
 
 function withAuth (handler) {
   return function (state, emit) {
