@@ -1,24 +1,16 @@
 const api = require('../api')
 
-const AUTH_ROUTES = new Set([
-  '/products'
-])
-
 module.exports = function store (state, emitter) {
   state.login = {
     firstLoad: true,
     authenticated: false,
+    loggingIn: false,
     loading: true,
     loggedIn: false,
     email: '',
-    invalidToken: false
+    invalidToken: false,
+    safeToAuthenticate: true
   }
-
-  emitter.on(state.events.NAVIGATE, async () => {
-    if (!state.login.authenticated && AUTH_ROUTES.has(state.href)) {
-      emitter.emit(state.events.PUSHSTATE, '/')
-    }
-  })
 
   emitter.on('login:check', async () => {
     if (state.login.firstLoad) {
@@ -27,6 +19,7 @@ module.exports = function store (state, emitter) {
     const res = await api.checkAuth()
     if (!res.ok) {
       state.login.loading = false
+      state.login.authenticated = false
       emitter.emit(state.events.RENDER)
       return
     }
@@ -37,6 +30,7 @@ module.exports = function store (state, emitter) {
   })
 
   emitter.on('login:auth', async () => {
+    state.login.safeToAuthenticate = false
     const { email, token } = state.query
     const res = await api.authenticate(email, token)
     if (!res.ok) {
@@ -44,6 +38,7 @@ module.exports = function store (state, emitter) {
       emitter.emit(state.events.RENDER)
       return
     }
+    state.login.safeToAuthenticate = true
     state.login.invalidToken = false
     state.login.authenticated = true
     emitter.emit(state.events.PUSHSTATE, '/products')
@@ -52,7 +47,7 @@ module.exports = function store (state, emitter) {
   emitter.on('DOMContentLoaded', () => {
     emitter.on('login:begin', async (email) => {
       state.login.email = email
-      state.login.loading = true
+      state.login.loggingIn = true
       emitter.emit(state.events.RENDER)
       try {
         const res = await api.login(email)
@@ -61,7 +56,7 @@ module.exports = function store (state, emitter) {
           emitter.emit(state.events.PUSHSTATE, '/error')
         } else {
           state.login.loggedIn = true
-          state.login.loading = false
+          state.login.loggingIn = false
           emitter.emit(state.events.RENDER)
         }
       } catch (e) {
