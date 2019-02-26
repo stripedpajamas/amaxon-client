@@ -1,6 +1,12 @@
 const html = require('choo/html')
 
 module.exports = (view, name) => (state, emit) => {
+  function onSignOut () {
+    emit('login:out')
+  }
+
+  const signOut = html`<a class="fr link white-80 hover-yellow pointer" onclick=${onSignOut}> Sign Out </a>`
+
   return html`
     <body class="sans-serif flex flex-column min-vh-100">
       <div class="pv2 pv3-l ph4 bg-yellow dark-gray">
@@ -14,6 +20,7 @@ module.exports = (view, name) => (state, emit) => {
           <a class="link white-80 hover-yellow" href="https://github.com/stripedpajamas/amaxon-client/blob/master/LICENSE">MIT License</a> /
           <a class="link white-80 hover-yellow" href="https://github.com/stripedpajamas/amaxon-client"> Github </a> /
           <a class="link white-80 hover-yellow" href="https://github.com/choojs/choo"> Made with Choo </a>
+          ${state.login.authenticated ? signOut : ''}
         </p>
       </footer>
     </body>

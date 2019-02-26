@@ -3,9 +3,10 @@ const fetch = window.fetch
 class API {
   constructor () {
     this.host = 'co7096zvs2.execute-api.us-east-1.amazonaws.com'
-    this.base = process.env.NODE_ENV !== 'production'
-      ? `https://${this.host}/test/`
-      : `https://${this.host}/prod/`
+    this.env = process.env.NODE_ENV !== 'production'
+      ? 'test'
+      : 'prod'
+    this.base = `https://${this.host}/${this.env}/`
     this.defaultOpts = {
       credentials: 'include'
     }
@@ -40,6 +41,11 @@ class API {
       body
     }, this.defaultOpts))
       .then(res => res.ok && res.json())
+  }
+  signOut () {
+    const endpoint = 'amaxon_sign_out'
+    const url = `${this.base}${endpoint}`
+    return fetch(url, this.defaultOpts)
   }
 }
 
