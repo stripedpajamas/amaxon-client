@@ -4,10 +4,11 @@ module.exports = function store (state, emitter) {
   state.login = {
     firstLoad: true,
     authenticated: false,
+    loggingIn: false,
     loading: true,
     loggedIn: false,
     email: '',
-    invalidToken: false,
+    invalidToken: true,
     safeToAuthenticate: true
   }
 
@@ -45,7 +46,7 @@ module.exports = function store (state, emitter) {
   emitter.on('DOMContentLoaded', () => {
     emitter.on('login:begin', async (email) => {
       state.login.email = email
-      state.login.loading = true
+      state.login.loggingIn = true
       emitter.emit(state.events.RENDER)
       try {
         const res = await api.login(email)
@@ -54,7 +55,7 @@ module.exports = function store (state, emitter) {
           emitter.emit(state.events.PUSHSTATE, '/error')
         } else {
           state.login.loggedIn = true
-          state.login.loading = false
+          state.login.loggingIn = false
           emitter.emit(state.events.RENDER)
         }
       } catch (e) {

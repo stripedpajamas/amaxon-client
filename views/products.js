@@ -32,8 +32,14 @@ module.exports = function view (state, emit) {
 
   if (state.products.loading) {
     return html`
-      <body>
-        <p>Loading products...</p>
+      <body class="sans-serif dark-gray flex flex-column min-vh-100">
+        ${header('Product Dashboard')}
+        <main style="flex: 1" class="pa4">
+          <div class="pt3 w-100 mw8 center">
+            <h1 class="f4 lh-copy tc">Loading products...</h2>
+          </div>
+        </main>
+        ${footer}
       </body>
     `
   }

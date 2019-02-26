@@ -29,7 +29,7 @@ class API {
     const endpoint = 'amaxon_get_products'
     const url = `${this.base}${endpoint}`
     return fetch(url, this.defaultOpts)
-      .then(res => res.json())
+      .then(res => res.ok && res.json())
   }
   setProducts (products) {
     const endpoint = 'amaxon_set_products'
@@ -39,7 +39,7 @@ class API {
       method: 'POST',
       body
     }, this.defaultOpts))
-      .then(res => res.json())
+      .then(res => res.ok && res.json())
   }
 }
 
