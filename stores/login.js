@@ -8,7 +8,7 @@ module.exports = function store (state, emitter) {
     loading: true,
     loggedIn: false,
     email: '',
-    invalidToken: true,
+    invalidToken: false,
     safeToAuthenticate: true
   }
 
