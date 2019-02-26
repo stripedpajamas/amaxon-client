@@ -1,4 +1,4 @@
-const fetch = require('isomorphic-fetch')
+const fetch = window.fetch
 
 class API {
   constructor () {
