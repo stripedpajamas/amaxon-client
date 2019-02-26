@@ -85,7 +85,7 @@ module.exports = function view (state, emit) {
                   <input id="url" name="url" placeholder="Amazon Product URL" required class="input-reset ba b--black-20 pa2 mb3 db w-100" type="text" autocomplete="off">
                 </div>
                 <div class="fl w-100 w-third-ns pa2">
-                  <input id="add" class="fw6 bg-dark-gray yellow input-reset ba b--black-20 pa2 mb3 db w-100" type="submit" value="Add Product">
+                  <input id="add" class="fw6 bg-dark-gray yellow input-reset ba b--black-20 pa2 mb3 db w-100 pointer hover-bg-black" type="submit" value="Add Product">
                 </div>
               </div>
             </form>

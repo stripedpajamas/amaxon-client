@@ -34,9 +34,9 @@ module.exports = function view (state, emit) {
                 ${state.login.loggingIn ? 'disabled' : ''}
               >
               <input
-                class="ba b--dark-gray f6 f5-l button-reset fl pv3 tc bg-animate bg-dark-gray hover-bg-black white pointer w-100 w-25-m w-20-l br2-ns br--right-ns"
+                class="ba b--dark-gray f6 f5-l button-reset fl pv3 tc bg-animate bg-dark-gray hover-bg-black yellow pointer w-100 w-25-m w-20-l br2-ns br--right-ns"
                 type="submit"
-                value=${state.login.loggingIn ? 'Loading...' : 'Send Login Email'}
+                value=${state.login.loggingIn ? 'Loading...' : 'Send Link'}
                 ${state.login.loggingIn ? 'disabled' : ''}
               >
             </div>
