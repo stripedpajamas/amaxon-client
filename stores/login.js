@@ -1,16 +1,22 @@
 const api = require('../api')
 
+const initialState = {
+  firstLoad: true,
+  authenticated: false,
+  loggingIn: false,
+  loading: true,
+  loggedIn: false,
+  email: '',
+  tokenText: 'Validating login token...',
+  safeToAuthenticate: true
+}
+
 module.exports = function store (state, emitter) {
-  state.login = {
-    firstLoad: true,
-    authenticated: false,
-    loggingIn: false,
-    loading: true,
-    loggedIn: false,
-    email: '',
-    invalidToken: false,
-    safeToAuthenticate: true
-  }
+  state.login = Object.assign({}, initialState)
+
+  emitter.on('login:init', () => {
+    state.login = Object.assign({}, initialState)
+  })
 
   emitter.on('login:check', async () => {
     if (state.login.firstLoad) {
@@ -34,20 +40,27 @@ module.exports = function store (state, emitter) {
     const { email, token } = state.query
     const res = await api.authenticate(email, token)
     if (!res.ok) {
-      state.login.invalidToken = true
+      state.login.tokenText = 'Invalid token. Redirecting to login page...'
       emitter.emit(state.events.RENDER)
+      setTimeout(() => {
+        emitter.emit(state.events.PUSHSTATE, '/')
+      }, 1000)
       return
     }
-    state.login.safeToAuthenticate = true
+    state.login.tokenText = 'Logged in successfully! Redirecting to dashboard...'
     state.login.invalidToken = false
     state.login.authenticated = true
-    emitter.emit(state.events.PUSHSTATE, '/products')
+    emitter.emit(state.events.RENDER)
+    setTimeout(() => {
+      emitter.emit(state.events.PUSHSTATE, '/products')
+    }, 700)
   })
 
   emitter.on('login:out', async () => {
     // delete cookie so we'll be prompted to auth again
     await api.signOut()
-    state.login.authenticated = false
+    emitter.emit('login:init')
+    emitter.emit('products:init')
     emitter.emit(state.events.PUSHSTATE, '/')
   })
 

@@ -18,6 +18,15 @@ function withAuth (handler) {
   }
 }
 
+function withQuery (handler) {
+  return function (state, emit) {
+    if (!state.query.email || !state.query.token) {
+      return loginView(state, emit)
+    }
+    return handler(state, emit)
+  }
+}
+
 css('tachyons')
 
 const app = choo()
@@ -30,7 +39,7 @@ app.use(require('./stores/login'))
 app.use(require('./stores/products'))
 
 app.route('/', loginView)
-app.route('/login', authView)
+app.route('/login', withQuery(authView))
 app.route('/products', withAuth(productView))
 app.route('/error', errorView)
 app.route('/*', notFoundView)

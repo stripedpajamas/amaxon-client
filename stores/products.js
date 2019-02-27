@@ -1,15 +1,22 @@
 const api = require('../api')
 
+const initialState = {
+  firstLoad: true,
+  loading: false,
+  products: []
+}
+
 module.exports = function store (state, emitter) {
-  state.products = {
-    firstLoad: true,
-    loading: false,
-    products: []
-  }
+  state.products = Object.assign({}, initialState)
+
+  emitter.on('products:init', () => {
+    state.products = Object.assign({}, initialState)
+  })
 
   emitter.on('products:get', async () => {
     state.products.firstLoad = false
     state.products.loading = true
+    emitter.emit(state.events.RENDER)
     try {
       const products = await api.getProducts()
       state.products.products = products || []

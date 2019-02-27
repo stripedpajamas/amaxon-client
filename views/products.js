@@ -39,6 +39,7 @@ module.exports = function view (state, emit) {
     <div class="overflow-auto">
       <div class="pt3 w-100 mw8 center">
         <h1 class="f4 lh-copy">Products currently watching</h2>
+        <p class="f6 i">Prices are checked daily at 9am UTC</p>
       </div>
       <div class="pt3 f6 w-100 mw8 center">
         <div class="cf lh-copy">
