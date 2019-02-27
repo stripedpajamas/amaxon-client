@@ -44,6 +44,13 @@ module.exports = function store (state, emitter) {
     emitter.emit(state.events.PUSHSTATE, '/products')
   })
 
+  emitter.on('login:out', async () => {
+    // delete cookie so we'll be prompted to auth again
+    await api.signOut()
+    state.login.authenticated = false
+    emitter.emit(state.events.PUSHSTATE, '/')
+  })
+
   emitter.on('DOMContentLoaded', () => {
     emitter.on('login:begin', async (email) => {
       state.login.email = email
