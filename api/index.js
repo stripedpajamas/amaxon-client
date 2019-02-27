@@ -1,6 +1,6 @@
 class API {
   constructor () {
-    this.fetch = global.window ? global.window.fetch : () => ({})
+    this.fetch = typeof window !== 'undefined' ? window.fetch : () => ({})
     this.host = 'co7096zvs2.execute-api.us-east-1.amazonaws.com'
     this.env = process.env.NODE_ENV !== 'production'
       ? 'test'
