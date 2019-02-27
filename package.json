@@ -12,6 +12,7 @@
     "test-deps": "dependency-check . && dependency-check . --extra --no-dev -i tachyons"
   },
   "dependencies": {
+    "aws-sdk": "^2.411.0",
     "choo": "^6.13.1",
     "sheetify": "^7.3.3",
     "tachyons": "^4.11.1"

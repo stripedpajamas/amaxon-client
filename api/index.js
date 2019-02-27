@@ -21,6 +21,11 @@ class API {
     const url = `${this.base}${endpoint}?email=${email}&token=${token}`
     return fetch(url, this.defaultOpts)
   }
+  deactivate (email, token) {
+    const endpoint = 'amaxon_deactivate'
+    const url = `${this.base}${endpoint}?email=${email}&token=${token}`
+    return fetch(url, this.defaultOpts)
+  }
   checkAuth () {
     const endpoint = 'amaxon_check_auth'
     const url = `${this.base}${endpoint}`

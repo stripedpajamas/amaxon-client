@@ -8,7 +8,8 @@ const initialState = {
   loggedIn: false,
   email: '',
   tokenText: 'Validating login token...',
-  safeToAuthenticate: true
+  safeToAuthenticate: true,
+  deactivateStatus: 0 // not started
 }
 
 module.exports = function store (state, emitter) {
@@ -16,6 +17,20 @@ module.exports = function store (state, emitter) {
 
   emitter.on('login:init', () => {
     state.login = Object.assign({}, initialState)
+  })
+
+  emitter.on('login:deactivate', async () => {
+    state.login.deactivateStatus = 1 // loading
+    emitter.emit(state.events.RENDER)
+    const { email, token } = state.query
+    const res = await api.deactivate(email, token)
+    if (!res.ok) {
+      state.login.deactivateStatus = -1 // failure
+      emitter.emit(state.events.RENDER)
+      return
+    }
+    state.login.deactivateStatus = 2 // success
+    emitter.emit(state.events.RENDER)
   })
 
   emitter.on('login:check', async () => {
