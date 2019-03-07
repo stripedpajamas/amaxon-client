@@ -21,7 +21,8 @@ module.exports = function view (state, emit) {
     const form = e.currentTarget
     const data = new window.FormData(form)
     const name = data.get('name')
-    const url = data.get('url')
+    const url = (data.get('url') || '').split('?')[0]
+    if (!url) return
     const newProducts = products.concat([
       { name, url, lastPrice: -1, lastCheck: -1 }
     ])
